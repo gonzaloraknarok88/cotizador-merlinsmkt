@@ -1,23 +1,140 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cotizador MERLINSMKT - Próximamente</title>
-  <style>
-    body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #1a1a2e; color: white; }
-    h1 { color: #d4af37; }
-    .message { margin: 30px auto; max-width: 600px; line-height: 1.6; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotizador MERLINSMKT - Profesional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        body { font-family: 'Poppins', sans-serif; background: #0f172a; color: white; }
+        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .gradient-text { background: linear-gradient(45deg, #fbbf24, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    </style>
 </head>
-<body>
-  <h1>✦ MERLINSMKT - Sistema de Cotizaciones</h1>
-  <div class="message">
-    <h2>Sitio en configuración</h2>
-    <p>El sistema de cotizaciones profesional está siendo configurado.</p>
-    <p>Pronto estará disponible con todas las funcionalidades completas.</p>
-    <p><strong>MERLINSMKT SPA · RUT 78.301.898-5</strong></p>
-    <p>www.merlinsmkt.com · merlinsmkt@otloock.cl · +56 9 9366 3399</p>
-  </div>
+<body class="p-4 md:p-8">
+    <div class="max-w-4xl mx-auto space-y-8">
+        <!-- Header -->
+        <header class="text-center space-y-2">
+            <h1 class="text-4xl font-bold gradient-text">✦ MERLINSMKT</h1>
+            <p class="text-gray-400">Sistema de Cotizaciones y Catálogo Digital</p>
+        </header>
+
+        <!-- Calculadora de Servicios -->
+        <section class="glass p-6 rounded-2xl shadow-xl">
+            <h2 class="text-2xl font-semibold mb-6 flex items-center gap-2">
+                <i class="fas fa-calculator text-yellow-500"></i> Calculadora de Presupuesto
+            </h2>
+            <div id="services-list" class="space-y-4">
+                <!-- Los servicios se cargarán dinámicamente -->
+            </div>
+            <div class="mt-8 pt-6 border-t border-gray-700 flex justify-between items-center">
+                <span class="text-xl">Total Estimado:</span>
+                <span id="total-price" class="text-3xl font-bold text-yellow-500">$0</span>
+            </div>
+        </section>
+
+        <!-- Formulario de Cotización -->
+        <section class="glass p-6 rounded-2xl shadow-xl">
+            <h2 class="text-2xl font-semibold mb-6 flex items-center gap-2">
+                <i class="fas fa-file-invoice-dollar text-yellow-500"></i> Solicitar Cotización Formal
+            </h2>
+            <form id="quote-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-2">
+                    <label class="text-sm text-gray-400">Nombre Completo</label>
+                    <input type="text" id="name" required class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 focus:ring-2 focus:ring-yellow-500 outline-none">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-sm text-gray-400">Correo Electrónico</label>
+                    <input type="email" id="email" required class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 focus:ring-2 focus:ring-yellow-500 outline-none">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-sm text-gray-400">WhatsApp / Teléfono</label>
+                    <input type="tel" id="phone" required class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 focus:ring-2 focus:ring-yellow-500 outline-none">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-sm text-gray-400">Empresa (Opcional)</label>
+                    <input type="text" id="company" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 focus:ring-2 focus:ring-yellow-500 outline-none">
+                </div>
+                <div class="md:col-span-2 space-y-2">
+                    <label class="text-sm text-gray-400">Detalles adicionales</label>
+                    <textarea id="notes" rows="3" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 focus:ring-2 focus:ring-yellow-500 outline-none"></textarea>
+                </div>
+                <div class="md:col-span-2">
+                    <button type="submit" class="w-full bg-yellow-500 hover:bg-yellow-600 text-slate-900 font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2">
+                        <i class="fab fa-whatsapp"></i> Enviar por WhatsApp
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center text-gray-500 text-sm py-8 border-t border-gray-800">
+            <p>MERLINSMKT SPA · RUT 78.301.898-5</p>
+            <p>San Miguel, Santiago, Chile</p>
+        </footer>
+    </div>
+
+    <script>
+        const services = [
+            { id: 'web', name: 'Diseño Web Pro', price: 450000, desc: 'Landing Page o Sitio Corporativo' },
+            { id: 'mkt', name: 'Marketing Digital', price: 250000, desc: 'Gestión de Redes Sociales mensual' },
+            { id: 'branding', name: 'Branding & Logo', price: 180000, desc: 'Identidad visual completa' },
+            { id: 'ads', name: 'Campañas Ads', price: 150000, desc: 'Google & Meta Ads setup' }
+        ];
+
+        let selectedServices = new Set();
+
+        function renderServices() {
+            const container = document.getElementById('services-list');
+            container.innerHTML = services.map(s => `
+                <div onclick="toggleService('${s.id}')" class="flex items-center justify-between p-4 rounded-xl cursor-pointer transition-all ${selectedServices.has(s.id) ? 'bg-yellow-500/20 border-yellow-500' : 'bg-slate-800/50 border-transparent'} border">
+                    <div>
+                        <h3 class="font-bold">${s.name}</h3>
+                        <p class="text-sm text-gray-400">${s.desc}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-bold text-yellow-500">$${s.price.toLocaleString()}</p>
+                        <i class="fas ${selectedServices.has(s.id) ? 'fa-check-circle text-yellow-500' : 'fa-circle text-gray-600'}"></i>
+                    </div>
+                </div>
+            `).join('');
+            updateTotal();
+        }
+
+        function toggleService(id) {
+            if (selectedServices.has(id)) selectedServices.delete(id);
+            else selectedServices.add(id);
+            renderServices();
+        }
+
+        function updateTotal() {
+            const total = Array.from(selectedServices).reduce((acc, id) => {
+                const service = services.find(s => s.id === id);
+                return acc + (service ? service.price : 0);
+            }, 0);
+            document.getElementById('total-price').innerText = '$' + total.toLocaleString();
+        }
+
+        document.getElementById('quote-form').onsubmit = (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const company = document.getElementById('company').value;
+            const selectedNames = Array.from(selectedServices).map(id => services.find(s => s.id === id).name);
+            const total = document.getElementById('total-price').innerText;
+            
+            const message = `*Nueva Solicitud de Cotización - MERLINSMKT*%0A%0A` +
+                           `*Nombre:* ${name}%0A` +
+                           `*Empresa:* ${company || 'N/A'}%0A` +
+                           `*Servicios:* ${selectedNames.join(', ')}%0A` +
+                           `*Presupuesto Estimado:* ${total}%0A%0A` +
+                           `_Enviado desde el catálogo digital_`;
+            
+            window.open(`https://wa.me/56993663399?text=${message}`, '_blank');
+        };
+
+        renderServices();
+    </script>
 </body>
 </html>
