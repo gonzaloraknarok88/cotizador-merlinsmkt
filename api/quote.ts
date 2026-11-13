@@ -37,12 +37,12 @@ async function sendToAllPlatforms(quote: Quotation) {
       }
     ).catch(e => console.log('📊 Google Sheets: Error (continuando...)')),
 
-    // 2. WHATSAPP - TWILIO (Automático al +56993663399)
+    // 2. WHATSAPP - TWILIO (Automático al +56942016119)
     axios.post(
       `https://api.twilio.com/2010-04-01/Accounts/${process.env.TWILIO_SID}/Messages.json`,
       new URLSearchParams({
         From: `whatsapp:${process.env.TWILIO_WHATSAPP_FROM}`,
-        To: 'whatsapp:+56993663399',
+        To: 'whatsapp:+56942016119',
         Body: `🔔 Nueva Cotización #${quote.id}\n\nCliente: ${quote.clientName}\nMonto: $${quote.total}\nCorreo: ${quote.clientEmail}\nTel: ${quote.clientPhone}\n\n✅ Revisa detalles en Google Sheets`
       }),
       {
