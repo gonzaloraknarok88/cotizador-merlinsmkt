@@ -217,7 +217,7 @@ main{max-width:1120px;margin:0 auto;padding:26px 14px 120px}
     <div class="crm-btns">
       <button class="btn-p" style="width:auto;padding:9px 16px;font-size:.8rem" onclick="openLead()">⚡ Cotiza Directo</button>
       <button class="btn-p burg" style="width:auto;padding:9px 16px;font-size:.8rem" onclick="openAgenda()">📅 Agendar</button>
-      <a href="https://wa.me/56993663399?text=Hola%20MerlinsMKT%20quiero%20una%20cotizaci%C3%B3n%20%F0%9F%9A%80" target="_blank" style="text-decoration:none"><button class="btn-p" style="width:auto;padding:9px 16px;font-size:.8rem;background:linear-gradient(135deg,#128C7E,#25D366)">💬 WhatsApp</button></a>
+      <a href="https://wa.me/56942016119?text=Hola%20MerlinsMKT%20quiero%20una%20cotizaci%C3%B3n%20%F0%9F%9A%80" target="_blank" style="text-decoration:none"><button class="btn-p" style="width:auto;padding:9px 16px;font-size:.8rem;background:linear-gradient(135deg,#128C7E,#25D366)">💬 WhatsApp</button></a>
       <a href="https://forms.gle/azobgzHb7zp1HsrB7" target="_blank" style="text-decoration:none">
         <button class="btn-p green" style="width:auto;padding:9px 16px;font-size:.8rem">📋 OC / Contrato</button>
       </a>
@@ -377,7 +377,7 @@ main{max-width:1120px;margin:0 auto;padding:26px 14px 120px}
   <div class="sec-title"><h2>🧮 Calculadora de Inversión</h2><p>Resumen de servicios seleccionados + IVA</p></div>
   <div class="calc-box">
     <div id="c-list"></div>
-    <div class="ct"><span class="lbl">TOTAL ESTIMADO</span><span class="amt" id="c-total">$0</span></div>
+    <div class="ct"><span class="lbl">TOTAL NETO (+ IVA 19%)</span><span class="amt" id="c-total">$0</span></div>
     <div style="margin-top:16px;display:flex;gap:9px;flex-wrap:wrap">
       <button class="btn-p" style="flex:1;min-width:150px" onclick="show('cot')">📄 Generar Cotización</button>
       <button class="btn-s" style="flex:0 0 auto" onclick="clearAll()">🗑 Limpiar</button>
@@ -404,147 +404,230 @@ main{max-width:1120px;margin:0 auto;padding:26px 14px 120px}
         <div id="q-items-form"><p style="font-size:.75rem;color:rgba(255,255,255,.28)">← Agrega servicios desde el catálogo</p></div>
       </div>
       <div class="actions">
-        <button class="btn-p" onclick="printQ()">🖨️ Imprimir / Descargar PDF</button>
-        <button class="btn-p blue" onclick="enviarSheets()">📊 Guardar en Google Sheets</button>
+        <button class="btn-p" onclick="enviarCotizacion()">📧 Enviar Cotización al Cliente (PDF + Correo)</button>
+        <button class="btn-p blue" onclick="descargarPDF()">📄 Descargar PDF</button>
+        <button class="btn-p blue" onclick="enviarWACotizacion()">💬 Enviar resumen por WhatsApp</button>
         <button class="btn-p burg" onclick="openAgenda()">📅 Agendar Reunión → Calendar</button>
         <a href="https://forms.gle/azobgzHb7zp1HsrB7" target="_blank" style="text-decoration:none;display:block">
           <button class="btn-p green">📋 Enviar OC / Contrato al Cliente</button>
         </a>
-        <a href="https://wa.me/56993663399?text=Hola%20MerlinsMKT%20quiero%20una%20cotizaci%C3%B3n%20%F0%9F%9A%80" target="_blank" style="text-decoration:none;display:block"><button class="btn-p" style="background:linear-gradient(135deg,#128C7E,#25D366)">💬 WhatsApp +56 9 9366 3399</button></a>
+        <a href="https://wa.me/56942016119?text=Hola%20MerlinsMKT%20quiero%20una%20cotizaci%C3%B3n%20%F0%9F%9A%80" target="_blank" style="text-decoration:none;display:block"><button class="btn-p" style="background:linear-gradient(135deg,#128C7E,#25D366)">💬 WhatsApp +56 9 4201 6119</button></a>
         <button class="btn-s" onclick="clearAll()">🗑 Nueva Cotización</button>
       </div>
       <div id="cot-status" class="st"></div>
 
       <!-- CONFIG SHEETS -->
-      <div class="panel" style="margin-top:13px">
-        <h3<!-- CONFIG SHEETS -->  <!-- CONFIG SHEETS -->\n<div style="display: none;" id="config-sheets-hidden">>⚙️ Configurar Google Apps Script</h3>
+      <div class="panel" id="config-sheets" style="margin-top:13px;display:none">
+        <h3>⚙️ Configurar Google Apps Script (solo administrador)</h3>
         <div class="fr">
           <label>URL de tu Apps Script (Web App)</label>
           <input id="gs-url" placeholder="https://script.google.com/macros/s/AKfy.../exec" oninput="saveGsUrl()">
         </div>
         <p style="font-size:.68rem;color:rgba(255,255,255,.28);margin-top:5px;line-height:1.6">
           1. Abre tu Google Sheet → Extensiones → Apps Script<br>
-          2. Borra todo y pega el código de abajo<br>
+          2. Borra todo y pega el código de abajo (también está en apps-script/Code.gs)<br>
           3. Implementar → Nueva implementación → App Web → Acceso: Cualquier persona<br>
           4. Copia la URL y pégala aquí arriba ↑
         </p>
-        <div class="code-block">// ═══════════════════════════════════════════════════
-// MERLINSMKT CRM — Google Apps Script
-// Sheet: 1QiyygKV3ihMnt1RCs92kNkPtvIKzjqpKIEIWJIJgnoE
-// Recibe: cotizacion | lead | agenda desde el catálogo
-// ═══════════════════════════════════════════════════
+        <div class="code-block">// ═══════════════════════════════════════════════════════════════
+// MERLINSMKT — Backend gratuito del Cotizador (Google Apps Script)
+// Guarda cotizaciones/leads/agenda en Google Sheets y envía al
+// cliente la cotización en PDF por correo (MailApp, plan gratis).
+//
+// Instalar (con la cuenta merlinsdigitalmastery@gmail.com):
+//  1. Abre el Google Sheet → Extensiones → Apps Script
+//  2. Borra todo y pega este archivo completo
+//  3. Implementar → Nueva implementación → Tipo: App web
+//     Ejecutar como: Yo · Quién tiene acceso: Cualquier persona
+//  4. Autoriza los permisos (Sheets, Gmail, Calendar)
+//  5. Copia la URL /exec y pégala en APPS_SCRIPT_URL del index.html
+// Cuota gratuita de Gmail: ~100 destinatarios por día.
+// ═══════════════════════════════════════════════════════════════
 
-const SHEET_ID   = '1QiyygKV3ihMnt1RCs92kNkPtvIKzjqpKIEIWJIJgnoE';
-const EMAIL_AVISO = 'contacto@merlinsmkt.com'; // ← cambia si quieres
-const FORM_OC    = 'https://forms.gle/azobgzHb7zp1HsrB7';
+const SHEET_ID        = '1QiyygKV3ihMnt1RCs92kNkPtvIKzjqpKIEIWJIJgnoE';
+const CORREOS_OFICIALES = ['merlinsdigitalmastery@gmail.com', 'merlinksmkt@outlook.cl'];
+const WHATSAPP_NUM    = '56942016119';
+const WHATSAPP_TXT    = '+56 9 4201 6119';
+const FORM_OC         = 'https://forms.gle/azobgzHb7zp1HsrB7';
+const NOMBRE_REMITENTE = 'MerlinsMKT · Agencia de Marketing Digital';
 
 function doPost(e) {
   try {
     const d = JSON.parse(e.postData.contents);
     const ss = SpreadsheetApp.openById(SHEET_ID);
-    if      (d.tipo === 'cotizacion') guardarCotizacion(ss, d);
+    let extra = {};
+    if      (d.tipo === 'cotizacion') extra = guardarCotizacion(ss, d);
     else if (d.tipo === 'lead')       guardarLead(ss, d);
     else if (d.tipo === 'agenda')     agendarCalendar(d, ss);
-    return ok();
-  } catch(err) {
-    return ContentService.createTextOutput(JSON.stringify({ok:false,err:err.message}))
-      .setMimeType(ContentService.MimeType.JSON);
+    else throw new Error('Tipo no reconocido: ' + d.tipo);
+    return json(Object.assign({ ok: true }, extra));
+  } catch (err) {
+    return json({ ok: false, err: err.message });
   }
 }
 
-function ok() {
-  return ContentService.createTextOutput(JSON.stringify({ok:true}))
+// Permite comprobar en el navegador que la URL está bien desplegada
+function doGet() { return json({ ok: true, servicio: 'cotizador-merlinsmkt' }); }
+
+function json(o) {
+  return ContentService.createTextOutput(JSON.stringify(o))
     .setMimeType(ContentService.MimeType.JSON);
 }
 
-// ── COTIZACIONES (Hoja 1 existente) ──────────────
+function esEmail(s) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(s || '').trim()); }
+function esc(s) {
+  return String(s == null ? '' : s).replace(/[&amp;&lt;&gt;"']/g, c =&gt;
+    ({ '&amp;': '&amp;amp;', '&lt;': '&amp;lt;', '&gt;': '&amp;gt;', '"': '&amp;quot;', "'": '&amp;#39;' }[c]));
+}
+
+// ── COTIZACIONES ───────────────────────────────────────────────
 function guardarCotizacion(ss, d) {
-  const sh = ss.getSheets()[0]; // Usa tu hoja existente
-  if (sh.getLastRow() === 0 || sh.getRange(1,1).getValue() === '') {
-    sh.getRange(1,1,1,10).setValues([[
-      'Empresa','Servicios','Cotización N°','Correo',
-      'OC','Enviado','X Enviar','Teléfono','Total','Fecha'
+  const sh = ss.getSheets()[0];
+  if (sh.getLastRow() === 0 || sh.getRange(1, 1).getValue() === '') {
+    sh.getRange(1, 1, 1, 10).setValues([[
+      'Empresa', 'Servicios', 'Cotización N°', 'Correo',
+      'OC', 'Enviado', 'X Enviar', 'Teléfono', 'Total', 'Fecha'
     ]]);
     formatHeader(sh, 10);
   }
+
+  let enviado = false, motivo = '';
+  if (d.enviarCorreo &amp;&amp; esEmail(d.email)) {
+    try { enviarCotizacionCliente(d); enviado = true; }
+    catch (e) { motivo = e.message; }
+  } else if (d.enviarCorreo) {
+    motivo = 'Email del cliente no válido';
+  }
+
   sh.appendRow([
     d.empresa, d.servicios, d.num, d.email,
-    'Pendiente ⏳', '', '✅ Enviar', d.telefono, d.total, d.fecha
+    'Pendiente ⏳', enviado ? '✅ ' + new Date().toLocaleString('es-CL') : '',
+    enviado ? '' : '✅ Enviar', d.telefono, d.total, d.fecha
   ]);
-  notificar('🧾 Cotización ' + d.num + ' — ' + d.empresa,
-    'Empresa: ' + d.empresa + '\nEmail: ' + d.email +
-    '\nServicios: ' + d.servicios + '\nTotal: ' + d.total +
-    '\nVer: https://docs.google.com/spreadsheets/d/' + SHEET_ID);
+
+  // Aviso interno a los correos oficiales (si no se envió ya en copia)
+  if (!enviado) {
+    notificar('🧾 Cotización ' + d.num + ' — ' + d.empresa,
+      'Empresa: ' + d.empresa + '\nEmail: ' + d.email +
+      '\nServicios: ' + d.servicios + '\nTotal: ' + d.total +
+      (motivo ? '\n⚠️ No se envió al cliente: ' + motivo : '') +
+      '\nVer: https://docs.google.com/spreadsheets/d/' + SHEET_ID);
+  }
+  return { correoEnviado: enviado, motivo: motivo };
 }
 
-// ── LEADS (crea hoja "Leads" si no existe) ────────
+function enviarCotizacionCliente(d) {
+  const nombre = d.representante || d.empresa || 'cliente';
+  const waTxt = encodeURIComponent('Hola MerlinsMKT, recibí la cotización ' + d.num + ' y quiero avanzar.');
+  const waLink = 'https://wa.me/' + WHATSAPP_NUM + '?text=' + waTxt;
+  const filas = (d.items || []).map(i =&gt;
+    '&lt;tr&gt;&lt;td style="padding:6px 8px;border-bottom:1px solid #eee"&gt;' + esc(i.name) + '&lt;/td&gt;' +
+    '&lt;td style="padding:6px 8px;border-bottom:1px solid #eee;text-align:center"&gt;' + esc(i.qty) + '&lt;/td&gt;' +
+    '&lt;td style="padding:6px 8px;border-bottom:1px solid #eee;text-align:right"&gt;' + esc(i.total) + '&lt;/td&gt;&lt;/tr&gt;').join('');
+
+  const html =
+    '&lt;div style="font-family:Arial,Helvetica,sans-serif;max-width:600px;margin:0 auto;color:#222"&gt;' +
+    '&lt;div style="background:#0c1929;padding:18px 22px;border-radius:10px 10px 0 0"&gt;' +
+    '&lt;span style="color:#c9a44a;font-size:20px;font-weight:bold"&gt;MERLINSMKT&lt;/span&gt;' +
+    '&lt;span style="color:#9aa;font-size:12px;display:block"&gt;Agencia de Marketing Digital&lt;/span&gt;&lt;/div&gt;' +
+    '&lt;div style="padding:22px;border:1px solid #e5dfd0;border-top:none;border-radius:0 0 10px 10px"&gt;' +
+    '&lt;p&gt;Estimado/a &lt;strong&gt;' + esc(nombre) + '&lt;/strong&gt;:&lt;/p&gt;' +
+    '&lt;p&gt;Junto con saludarle cordialmente, y agradeciendo de antemano su interés en nuestros servicios, ' +
+    'le hacemos llegar la cotización &lt;strong&gt;' + esc(d.num) + '&lt;/strong&gt; preparada especialmente para ' +
+    '&lt;strong&gt;' + esc(d.empresa) + '&lt;/strong&gt;. Encontrará el documento completo en PDF adjunto a este correo.&lt;/p&gt;' +
+    '&lt;table style="width:100%;border-collapse:collapse;font-size:14px;margin:14px 0"&gt;' +
+    '&lt;tr style="background:#f6f1e7"&gt;&lt;th style="padding:6px 8px;text-align:left"&gt;Servicio&lt;/th&gt;' +
+    '&lt;th style="padding:6px 8px"&gt;Cant.&lt;/th&gt;&lt;th style="padding:6px 8px;text-align:right"&gt;Valor&lt;/th&gt;&lt;/tr&gt;' + filas +
+    '&lt;tr&gt;&lt;td colspan="2" style="padding:6px 8px;text-align:right"&gt;Subtotal neto&lt;/td&gt;&lt;td style="padding:6px 8px;text-align:right"&gt;' + esc(d.subtotal) + '&lt;/td&gt;&lt;/tr&gt;' +
+    '&lt;tr&gt;&lt;td colspan="2" style="padding:6px 8px;text-align:right"&gt;IVA 19%&lt;/td&gt;&lt;td style="padding:6px 8px;text-align:right"&gt;' + esc(d.iva) + '&lt;/td&gt;&lt;/tr&gt;' +
+    '&lt;tr&gt;&lt;td colspan="2" style="padding:6px 8px;text-align:right;font-weight:bold"&gt;TOTAL&lt;/td&gt;&lt;td style="padding:6px 8px;text-align:right;font-weight:bold;color:#a8862f"&gt;' + esc(d.total) + '&lt;/td&gt;&lt;/tr&gt;' +
+    '&lt;/table&gt;' +
+    (d.obs ? '&lt;p style="font-size:13px;color:#555"&gt;&lt;strong&gt;Observaciones:&lt;/strong&gt; ' + esc(d.obs) + '&lt;/p&gt;' : '') +
+    '&lt;p&gt;Si desea avanzar o resolver cualquier duda, puede escribirnos directamente por WhatsApp:&lt;/p&gt;' +
+    '&lt;p style="text-align:center;margin:18px 0"&gt;&lt;a href="' + waLink + '" style="background:#25D366;color:#fff;' +
+    'padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:bold"&gt;💬 WhatsApp ' + WHATSAPP_TXT + '&lt;/a&gt;&lt;/p&gt;' +
+    '&lt;p&gt;Para formalizar la contratación puede completar la orden de compra aquí: &lt;a href="' + FORM_OC + '"&gt;' + FORM_OC + '&lt;/a&gt;&lt;/p&gt;' +
+    '&lt;p&gt;Quedamos atentos a sus comentarios.&lt;/p&gt;' +
+    '&lt;p&gt;Saludos cordiales,&lt;br&gt;&lt;strong&gt;Equipo MerlinsMKT&lt;/strong&gt;&lt;br&gt;' +
+    'WhatsApp: &lt;a href="' + waLink + '"&gt;' + WHATSAPP_TXT + '&lt;/a&gt;&lt;br&gt;' +
+    CORREOS_OFICIALES.map(c =&gt; '&lt;a href="mailto:' + c + '"&gt;' + c + '&lt;/a&gt;').join(' · ') + '&lt;/p&gt;' +
+    '&lt;/div&gt;&lt;/div&gt;';
+
+  const texto =
+    'Estimado/a ' + nombre + ':\n\n' +
+    'Junto con saludarle cordialmente, le hacemos llegar la cotización ' + d.num + ' para ' + d.empresa +
+    '. Encontrará el documento en PDF adjunto.\n\nTOTAL: ' + d.total +
+    '\n\nWhatsApp: ' + WHATSAPP_TXT + ' (' + waLink + ')\nCorreos: ' + CORREOS_OFICIALES.join(' · ') +
+    '\n\nSaludos cordiales,\nEquipo MerlinsMKT';
+
+  const opciones = {
+    name: NOMBRE_REMITENTE,
+    htmlBody: html,
+    cc: CORREOS_OFICIALES.join(','),
+    replyTo: CORREOS_OFICIALES[0]
+  };
+  if (d.pdfBase64) {
+    opciones.attachments = [Utilities.newBlob(
+      Utilities.base64Decode(d.pdfBase64), 'application/pdf',
+      d.pdfNombre || ('Cotizacion-' + d.num + '.pdf'))];
+  }
+  MailApp.sendEmail(String(d.email).trim(),
+    'Cotización ' + d.num + ' · MerlinsMKT — ' + d.empresa, texto, opciones);
+}
+
+// ── LEADS ──────────────────────────────────────────────────────
 function guardarLead(ss, d) {
   let sh = ss.getSheetByName('Leads');
   if (!sh) {
     sh = ss.insertSheet('Leads');
-    sh.getRange(1,1,1,9).setValues([[
-      'Fecha','Nombre','Email','Teléfono',
-      'Empresa','Servicio Interés','Mensaje','Estado','Seguimiento'
+    sh.getRange(1, 1, 1, 9).setValues([[
+      'Fecha', 'Nombre', 'Email', 'Teléfono',
+      'Empresa', 'Servicio Interés', 'Mensaje', 'Estado', 'Seguimiento'
     ]]);
     formatHeader(sh, 9);
   }
-  sh.appendRow([
-    d.fecha, d.nombre, d.email, d.telefono,
-    d.empresa||'', d.servicio||'', d.mensaje||'',
-    '🟢 Nuevo', ''
-  ]);
+  sh.appendRow([d.fecha, d.nombre, d.email, d.telefono,
+    d.empresa || '', d.servicio || '', d.mensaje || '', '🟢 Nuevo', '']);
   notificar('🟢 Lead: ' + d.nombre,
-    'Nombre: ' + d.nombre + '\nEmail: ' + d.email +
-    '\nTel: ' + d.telefono + '\nEmpresa: ' + (d.empresa||'-') +
-    '\nInterés: ' + (d.servicio||'-') +
+    'Nombre: ' + d.nombre + '\nEmail: ' + d.email + '\nTel: ' + d.telefono +
+    '\nEmpresa: ' + (d.empresa || '-') + '\nInterés: ' + (d.servicio || '-') +
     '\nVer: https://docs.google.com/spreadsheets/d/' + SHEET_ID);
 }
 
-// ── AGENDA CALENDAR + hoja Agendamientos ─────────
+// ── AGENDA CALENDAR ────────────────────────────────────────────
 function agendarCalendar(d, ss) {
-  const cal   = CalendarApp.getDefaultCalendar();
+  const cal = CalendarApp.getDefaultCalendar();
   const inicio = new Date(d.fechaReunion);
-  const fin    = new Date(inicio.getTime() + 60*60*1000);
-  cal.createEvent('📋 MerlinsMKT — ' + d.empresa, inicio, fin, {
-    description:
-      '👤 ' + d.nombre   + '\n' +
-      '🏢 ' + d.empresa  + '\n' +
-      '📧 ' + d.email    + '\n' +
-      '📞 ' + d.telefono + '\n' +
-      '💼 ' + d.servicio + '\n\n' +
-      '📝 ' + (d.mensaje||'') + '\n\n' +
-      '📋 OC/Contrato: ' + FORM_OC,
-    guests: d.email,
+  const fin = new Date(inicio.getTime() + 60 * 60 * 1000);
+  const opts = {
+    description: '👤 ' + d.nombre + '\n🏢 ' + d.empresa + '\n📧 ' + d.email +
+      '\n📞 ' + d.telefono + '\n💼 ' + d.servicio + '\n\n📝 ' + (d.mensaje || '') +
+      '\n\n📋 OC/Contrato: ' + FORM_OC + '\n💬 WhatsApp: ' + WHATSAPP_TXT,
     sendInvites: true
-  });
+  };
+  if (esEmail(d.email)) opts.guests = d.email;
+  cal.createEvent('📋 MerlinsMKT — ' + d.empresa, inicio, fin, opts);
   let sh = ss.getSheetByName('Agendamientos');
   if (!sh) {
     sh = ss.insertSheet('Agendamientos');
-    sh.getRange(1,1,1,7).setValues([[
-      'Fecha Registro','Fecha Reunión','Nombre','Empresa',
-      'Email','Teléfono','Servicio'
+    sh.getRange(1, 1, 1, 7).setValues([[
+      'Fecha Registro', 'Fecha Reunión', 'Nombre', 'Empresa', 'Email', 'Teléfono', 'Servicio'
     ]]);
     formatHeader(sh, 7);
   }
-  sh.appendRow([
-    new Date().toLocaleDateString('es-CL'),
-    d.fechaReunion, d.nombre, d.empresa,
-    d.email, d.telefono, d.servicio
-  ]);
+  sh.appendRow([new Date().toLocaleDateString('es-CL'), d.fechaReunion,
+    d.nombre, d.empresa, d.email, d.telefono, d.servicio]);
   notificar('📅 Reunión: ' + d.empresa,
-    'Fecha: ' + d.fechaReunion + '\nContacto: ' + d.nombre +
-    '\nEmail: ' + d.email);
+    'Fecha: ' + d.fechaReunion + '\nContacto: ' + d.nombre + '\nEmail: ' + d.email);
 }
 
 function formatHeader(sh, cols) {
-  sh.getRange(1,1,1,cols)
-    .setFontWeight('bold')
-    .setBackground('#0c1929')
-    .setFontColor('#c9a44a');
+  sh.getRange(1, 1, 1, cols).setFontWeight('bold')
+    .setBackground('#0c1929').setFontColor('#c9a44a');
 }
 
 function notificar(asunto, cuerpo) {
-  try { MailApp.sendEmail(EMAIL_AVISO, asunto, cuerpo); } catch(e) {}
+  try { MailApp.sendEmail(CORREOS_OFICIALES.join(','), asunto, cuerpo, { name: NOMBRE_REMITENTE }); } catch (e) {}
 }
 </div>
       </div>
@@ -585,7 +668,7 @@ function notificar(asunto, cuerpo) {
           <div class="sig-rut">RUT: 16.984.961-7</div>
         </div>
         <div class="qpf-ct">
-          <p>📞 +56 9 9366 3399<br><a href="mailto:contacto@merlinsmkt.com">contacto@merlinsmkt.com</a><br><a href="https://www.merlinsmkt.com">www.merlinsmkt.com</a></p>
+          <p>📞 +56 9 4201 6119<br><a href="mailto:merlinsdigitalmastery@gmail.com">merlinsdigitalmastery@gmail.com</a><br><a href="mailto:merlinksmkt@outlook.cl">merlinksmkt@outlook.cl</a><br><a href="https://www.merlinsmkt.com">www.merlinsmkt.com</a></p>
         </div>
       </div>
     </div>
@@ -675,12 +758,37 @@ function notificar(asunto, cuerpo) {
 
 <div id="toast"></div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
-const QN='COT-'+String(100+Math.floor(Math.random()*900));
+// ═══ CONFIGURACIÓN OFICIAL ═══════════════════════════════════
+// Pega aquí la URL /exec del Apps Script (apps-script/Code.gs) para que
+// TODOS los clientes puedan enviar cotizaciones sin configurar nada.
+const APPS_SCRIPT_URL='';
+const WA_NUM='56942016119';
+const WA_TXT='+56 9 4201 6119';
+const CORREOS_OFICIALES=['merlinsdigitalmastery@gmail.com','merlinksmkt@outlook.cl'];
+// ═════════════════════════════════════════════════════════════
+
+const _now=new Date();
+const _p2=n=>String(n).padStart(2,'0');
+const QN='COT-'+_now.getFullYear()+_p2(_now.getMonth()+1)+_p2(_now.getDate())+'-'+_p2(_now.getHours())+_p2(_now.getMinutes())+_p2(_now.getSeconds());
 document.getElementById('qp-num').textContent=QN;
 let cart=[];
-const savedUrl=localStorage.getItem('gs_url');
+function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+const savedUrl=lsGet('gs_url');
 if(savedUrl) document.getElementById('gs-url').value=savedUrl;
+if(new URLSearchParams(location.search).has('admin')) document.getElementById('config-sheets').style.display='block';
+
+// Fechas por defecto: hoy y +30 días
+(function(){
+  const iso=d=>d.getFullYear()+'-'+_p2(d.getMonth()+1)+'-'+_p2(d.getDate());
+  const vl=new Date(_now.getTime()+30*864e5);
+  document.getElementById('md-em').value=iso(_now);
+  document.getElementById('md-vl').value=iso(vl);
+  document.getElementById('qp-em').textContent=fmtD(iso(_now));
+  document.getElementById('qp-vl').textContent=fmtD(iso(vl));
+})();
 
 // NAV
 document.querySelectorAll('#mainnav .tab').forEach(btn=>{
@@ -754,31 +862,163 @@ function upd(){
 }
 
 // SHEETS
-function saveGsUrl(){localStorage.setItem('gs_url',document.getElementById('gs-url').value);}
-function getUrl(){return document.getElementById('gs-url').value.trim();}
+function saveGsUrl(){lsSet('gs_url',document.getElementById('gs-url').value);}
+function getUrl(){return (document.getElementById('gs-url').value.trim()||APPS_SCRIPT_URL).trim();}
 
-async function enviarSheets(){
-  const url=getUrl(); const st=document.getElementById('cot-status');
-  if(!url){st.className='st err';st.textContent='⚠️ Configura la URL de Apps Script abajo';return;}
-  if(!cart.length){st.className='st err';st.textContent='⚠️ Agrega al menos un servicio';return;}
-  let sub=0; cart.forEach(i=>sub+=i.price*i.qty);
-  const iva=Math.round(sub*0.19);
-  const data={tipo:'cotizacion',fecha:new Date().toLocaleDateString('es-CL'),num:QN,
+// Envía JSON al Apps Script. text/plain evita el preflight CORS y permite leer la respuesta.
+async function postScript(data){
+  const url=getUrl();
+  if(!url) throw new Error('El envío automático aún no está configurado. Escríbenos por WhatsApp '+WA_TXT);
+  try{
+    const r=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(data),redirect:'follow'});
+    const j=await r.json();
+    if(!j.ok) throw new Error(j.err||'Error del servidor');
+    return j;
+  }catch(e){
+    // TypeError con conexión activa = la petición llegó pero el navegador no pudo leer la respuesta (CORS).
+    // No se reintenta para no duplicar correos.
+    if(e instanceof TypeError && navigator.onLine!==false) return {ok:true,sinConfirmar:true};
+    if(e instanceof TypeError) throw new Error('Sin conexión a internet. Intenta nuevamente.');
+    throw e;
+  }
+}
+
+function totales(){let sub=0;cart.forEach(i=>sub+=i.price*i.qty);const iva=Math.round(sub*0.19);return{sub,iva,total:sub+iva};}
+function nombreArchivo(){const emp=(document.getElementById('q-nm').value||'Cliente').replace(/[^\w\-áéíóúñÁÉÍÓÚÑ ]/g,'').trim().replace(/\s+/g,'-');return 'Cotizacion-'+QN+'-'+emp+'.pdf';}
+
+// ═══ PDF corporativo (A4, vectorial) con jsPDF ═══════════════
+function crearPDF(){
+  upd();
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({unit:'mm',format:'a4'});
+  const W=210,M=16,NAVY=[12,25,41],GOLD=[201,164,74],GRAY=[110,110,110];
+  const v=id=>(document.getElementById(id).value||'').trim();
+  const t=totales();
+  // Cabecera
+  doc.setFillColor(...NAVY);doc.rect(0,0,W,38,'F');
+  let x=M;
+  const logo=document.querySelector('#qprev .qph-logo');
+  if(logo&&logo.src&&logo.src.startsWith('data:image')){
+    try{doc.addImage(logo.src,logo.src.includes('png')?'PNG':'JPEG',M,8,22,22);x=M+27;}catch(e){}
+  }
+  doc.setTextColor(...GOLD);doc.setFont('times','bold');doc.setFontSize(20);doc.text('MERLINSMKT',x,18);
+  doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(200,200,200);
+  doc.text('Agencia de Marketing Digital · MerlinsMKT SpA',x,24);
+  doc.setTextColor(...GOLD);doc.setFont('helvetica','bold');doc.setFontSize(11);
+  doc.text('COTIZACIÓN '+QN,W-M,15,{align:'right'});
+  doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(200,200,200);
+  doc.text('Emisión: '+document.getElementById('qp-em').textContent,W-M,22,{align:'right'});
+  doc.text('Válida hasta: '+document.getElementById('qp-vl').textContent,W-M,27,{align:'right'});
+  // Cliente
+  let y=48;
+  const cli=[['Empresa / Cliente',v('q-nm')||'—'],['RUT',v('q-rut')],['Representante',v('q-rep')],['Email',v('q-email')],['Teléfono',v('q-tel')]].filter(r=>r[1]);
+  doc.setFillColor(246,241,231);doc.roundedRect(M,y-6,W-2*M,8+cli.length*6,2,2,'F');
+  cli.forEach((r,i)=>{doc.setFontSize(8);doc.setTextColor(...GRAY);doc.setFont('helvetica','normal');doc.text(r[0].toUpperCase(),M+4,y+i*6);
+    doc.setTextColor(17,17,17);doc.setFont('helvetica',i===0?'bold':'normal');doc.setFontSize(i===0?11:9);doc.text(String(r[1]),M+42,y+i*6);});
+  y+=cli.length*6+10;
+  // Tabla
+  doc.setFillColor(...NAVY);doc.rect(M,y-5,W-2*M,8,'F');
+  doc.setTextColor(...GOLD);doc.setFont('helvetica','bold');doc.setFontSize(9);
+  doc.text('SERVICIO',M+3,y);doc.text('CANT.',W-M-62,y,{align:'center'});doc.text('P. UNIT.',W-M-38,y,{align:'right'});doc.text('VALOR',W-M-3,y,{align:'right'});
+  y+=9;doc.setFont('helvetica','normal');
+  cart.forEach((i,k)=>{
+    const lines=doc.splitTextToSize(i.name,W-2*M-80);
+    const h=Math.max(1,lines.length)*5+3;
+    if(y+h>250){doc.addPage();y=20;}
+    if(k%2===0){doc.setFillColor(250,248,243);doc.rect(M,y-5,W-2*M,h,'F');}
+    doc.setTextColor(17,17,17);doc.setFontSize(9.5);doc.text(lines,M+3,y);
+    doc.text(String(i.qty),W-M-62,y,{align:'center'});
+    doc.text(fmt(i.price),W-M-38,y,{align:'right'});
+    doc.setFont('helvetica','bold');doc.text(fmt(i.price*i.qty),W-M-3,y,{align:'right'});doc.setFont('helvetica','normal');
+    y+=h;
+  });
+  doc.setDrawColor(...NAVY);doc.setLineWidth(0.6);doc.line(W-M-80,y,W-M,y);y+=6;
+  const fila=(lbl,val,big)=>{doc.setFont('helvetica',big?'bold':'normal');doc.setFontSize(big?12:9.5);doc.setTextColor(...(big?NAVY:GRAY));
+    doc.text(lbl,W-M-80,y);doc.setTextColor(...(big?[168,134,47]:[17,17,17]));doc.text(val,W-M-3,y,{align:'right'});y+=big?8:6;};
+  fila('Subtotal neto',fmt(t.sub));fila('IVA 19%',fmt(t.iva));fila('TOTAL',fmt(t.total),true);
+  // Observaciones
+  const obs=v('q-obs');
+  if(obs){y+=2;const ol=doc.splitTextToSize('Observaciones: '+obs,W-2*M-8);
+    if(y+ol.length*5>255){doc.addPage();y=20;}
+    doc.setFillColor(253,249,240);doc.rect(M,y-5,W-2*M,ol.length*5+4,'F');doc.setFillColor(...GOLD);doc.rect(M,y-5,1.2,ol.length*5+4,'F');
+    doc.setFontSize(9);doc.setTextColor(80,80,80);doc.setFont('helvetica','normal');doc.text(ol,M+4,y);y+=ol.length*5+6;}
+  // Pie con firma y contacto (en todas las páginas)
+  const n=doc.getNumberOfPages();
+  for(let pg=1;pg<=n;pg++){
+    doc.setPage(pg);const F=262;
+    doc.setFillColor(...NAVY);doc.rect(0,F,W,35,'F');
+    doc.setTextColor(...GOLD);doc.setFont('times','bold');doc.setFontSize(12);doc.text('G.A.R.A.',M+30,F+9,{align:'center'});
+    doc.setDrawColor(150,150,150);doc.setLineWidth(0.2);doc.line(M+8,F+11,M+52,F+11);
+    doc.setFont('helvetica','bold');doc.setFontSize(7.5);doc.text('GONZALO ANDRÉS ROJAS ARANEDA',M+30,F+16,{align:'center'});
+    doc.setFont('helvetica','normal');doc.setTextColor(190,190,190);doc.setFontSize(7);
+    doc.text('Representante Legal · MERLINSMKT SPA',M+30,F+20,{align:'center'});doc.text('RUT: 16.984.961-7',M+30,F+24,{align:'center'});
+    doc.setFontSize(8.5);doc.setTextColor(...GOLD);
+    doc.textWithLink('WhatsApp: '+WA_TXT,W-M,F+9,{align:'right',url:'https://wa.me/'+WA_NUM});
+    CORREOS_OFICIALES.forEach((c,i)=>doc.textWithLink(c,W-M,F+15+i*5,{align:'right',url:'mailto:'+c}));
+    doc.textWithLink('www.merlinsmkt.com',W-M,F+25,{align:'right',url:'https://www.merlinsmkt.com'});
+    doc.setTextColor(150,150,150);doc.setFontSize(7);doc.text('Página '+pg+' de '+n,W/2,F+31,{align:'center'});
+  }
+  return doc;
+}
+function pdfDisponible(){return !!(window.jspdf&&window.jspdf.jsPDF);}
+async function descargarPDF(){
+  const st=document.getElementById('cot-status');
+  if(!cart.length){st.className='st err';st.style.display='block';st.textContent='⚠️ Agrega al menos un servicio';return;}
+  if(!pdfDisponible()){printQ();return;}
+  try{crearPDF().save(nombreArchivo());toast('📄 PDF descargado');}
+  catch(e){console.error(e);printQ();}
+}
+async function pdfBase64(){
+  const uri=crearPDF().output('datauristring');
+  return uri.substring(uri.indexOf(',')+1);
+}
+
+function datosCotizacion(){
+  const t=totales();
+  return {tipo:'cotizacion',fecha:new Date().toLocaleDateString('es-CL'),num:QN,
     empresa:document.getElementById('q-nm').value||'Sin nombre',
     rut:document.getElementById('q-rut').value||'',
     representante:document.getElementById('q-rep').value||'',
-    email:document.getElementById('q-email').value||'',
+    email:(document.getElementById('q-email').value||'').trim(),
     telefono:document.getElementById('q-tel').value||'',
     servicios:cart.map(i=>i.name+(i.qty>1?' x'+i.qty:'')).join(' | '),
-    subtotal:fmt(sub),iva:fmt(iva),total:fmt(sub+iva),
+    items:cart.map(i=>({name:i.name,qty:i.qty,total:fmt(i.price*i.qty)})),
+    subtotal:fmt(t.sub),iva:fmt(t.iva),total:fmt(t.total),
     obs:document.getElementById('q-obs').value||''};
-  st.className='st';st.textContent='⏳ Guardando...';st.style.display='block';
-  try{
-    await fetch(url,{method:'POST',body:JSON.stringify(data),mode:'no-cors'});
-    st.className='st ok';st.textContent='✅ Cotización '+QN+' guardada en Google Sheets';
-    toast('📊 Guardado en Sheets');
-  }catch(e){st.className='st err';st.textContent='❌ Error. Verifica la URL.';}
 }
+
+// Flujo completo: PDF → correo al cliente (con copia a los correos oficiales) → Sheets
+async function enviarCotizacion(){
+  const st=document.getElementById('cot-status');st.style.display='block';
+  if(!cart.length){st.className='st err';st.textContent='⚠️ Agrega al menos un servicio';return;}
+  const data=datosCotizacion();
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)){st.className='st err';st.textContent='⚠️ Ingresa un email válido del cliente';document.getElementById('q-email').focus();return;}
+  if(!getUrl()){st.className='st err';st.innerHTML='⚠️ El envío automático aún no está activo. Descarga el PDF o <a href="https://wa.me/'+WA_NUM+'" target="_blank" style="color:inherit;text-decoration:underline">escríbenos por WhatsApp</a>.';return;}
+  st.className='st';st.textContent='⏳ Generando PDF...';
+  try{
+    if(pdfDisponible()){data.pdfBase64=await pdfBase64();data.pdfNombre=nombreArchivo();}
+    data.enviarCorreo=true;
+    st.textContent='⏳ Enviando cotización a '+data.email+'...';
+    const r=await postScript(data);
+    if(r.sinConfirmar){st.className='st ok';st.textContent='✅ Cotización '+QN+' enviada. Revisa tu bandeja de entrada (y spam) en unos minutos.';}
+    else if(r.correoEnviado){st.className='st ok';st.textContent='✅ Cotización '+QN+' enviada a '+data.email+' con el PDF adjunto.';}
+    else{st.className='st err';st.textContent='⚠️ Guardada, pero el correo no salió: '+(r.motivo||'error desconocido');}
+    toast('📧 Cotización enviada');
+  }catch(e){st.className='st err';st.textContent='❌ '+e.message;}
+}
+
+function enviarWACotizacion(){
+  if(!cart.length){toast('⚠️ Agrega al menos un servicio');return;}
+  const d=datosCotizacion();
+  let msg='Hola MerlinsMKT 👋, les escribo por la cotización '+QN;
+  if(d.empresa&&d.empresa!=='Sin nombre') msg+=' de '+d.empresa;
+  msg+=':\n'+cart.map(i=>'• '+i.name+(i.qty>1?' x'+i.qty:'')+' — '+fmt(i.price*i.qty)).join('\n');
+  msg+='\nSubtotal: '+d.subtotal+' + IVA: '+d.iva+'\nTOTAL: '+d.total+'\n¿Podemos avanzar?';
+  window.open('https://wa.me/'+WA_NUM+'?text='+encodeURIComponent(msg),'_blank');
+}
+
+// Compatibilidad: el antiguo botón de Sheets ahora hace el flujo completo
+function enviarSheets(){return enviarCotizacion();}
 
 // LEAD
 function openLead(){
@@ -793,8 +1033,7 @@ function openLead(){
   openM('md-lead');
 }
 async function enviarLead(){
-  const url=getUrl(); const st=document.getElementById('ld-status');
-  if(!url){st.className='st err';st.textContent='⚠️ Configura Apps Script en sección Cotización';return;}
+  const st=document.getElementById('ld-status');
   const data={tipo:'lead',fecha:new Date().toLocaleDateString('es-CL'),
     nombre:document.getElementById('ld-nm').value||'',
     email:document.getElementById('ld-email').value||'',
@@ -805,10 +1044,10 @@ async function enviarLead(){
   if(!data.nombre&&!data.email){st.className='st err';st.textContent='⚠️ Nombre o email requerido';return;}
   st.className='st';st.textContent='⏳ Guardando lead...';st.style.display='block';
   try{
-    await fetch(url,{method:'POST',body:JSON.stringify(data),mode:'no-cors'});
+    await postScript(data);
     st.className='st ok';st.textContent='✅ Lead guardado en Google Sheets → Hoja: Leads';
     toast('👤 Lead guardado');setTimeout(()=>closeM('md-lead'),2200);
-  }catch(e){st.className='st err';st.textContent='❌ Error. Verifica la URL.';}
+  }catch(e){st.className='st err';st.textContent='❌ '+e.message;}
 }
 
 // AGENDA
@@ -824,8 +1063,7 @@ function openAgenda(){
   openM('md-agenda');
 }
 async function enviarAgenda(){
-  const url=getUrl(); const st=document.getElementById('ag-status');
-  if(!url){st.className='st err';st.textContent='⚠️ Configura Apps Script en sección Cotización';return;}
+  const st=document.getElementById('ag-status');
   const fecha=document.getElementById('ag-fecha').value;
   if(!fecha){st.className='st err';st.textContent='⚠️ Selecciona fecha y hora';return;}
   const data={tipo:'agenda',
@@ -838,10 +1076,10 @@ async function enviarAgenda(){
     fechaReunion:fecha};
   st.className='st';st.textContent='⏳ Creando evento en Calendar...';st.style.display='block';
   try{
-    await fetch(url,{method:'POST',body:JSON.stringify(data),mode:'no-cors'});
+    await postScript(data);
     st.className='st ok';st.textContent='✅ Reunión creada en Google Calendar · Invitación enviada';
     toast('📅 Reunión agendada');setTimeout(()=>closeM('md-agenda'),2200);
-  }catch(e){st.className='st err';st.textContent='❌ Error. Verifica la URL.';}
+  }catch(e){st.className='st err';st.textContent='❌ '+e.message;}
 }
 
 // MODAL
@@ -861,6 +1099,7 @@ function fmtD(d){if(!d)return'—';const ms=['Ene','Feb','Mar','Abr','May','Jun'
 function printQ(){
   const pr=document.getElementById('qprev').outerHTML;
   const w=window.open('','_blank');
+  if(!w){toast('⚠️ Permite ventanas emergentes para imprimir');return;}
   w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Cotización ${QN}</title><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"><style>*{box-sizing:border-box;margin:0;padding:0}body{padding:18px;background:#fff;font-family:'DM Sans',sans-serif}#qprev{max-width:600px;margin:0 auto;border:1px solid #ddd;border-radius:13px;overflow:hidden}.qph{background:#0c1929;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:9px}.qph-logo{width:42px;height:42px;border-radius:50%;border:2px solid #c9a44a;object-fit:cover;flex-shrink:0}.qph-brand .nm{font-family:'Cormorant Garamond',serif;color:#c9a44a;font-size:.9rem;font-weight:700}.qph-brand .su{color:rgba(255,255,255,.36);font-size:.57rem;letter-spacing:.1em;text-transform:uppercase}.qph-meta{text-align:right;flex-shrink:0}.qn{font-family:'Cormorant Garamond',serif;color:#c9a44a;font-size:.72rem;font-weight:600}.qd{color:rgba(255,255,255,.36);font-size:.57rem;margin-top:2px;line-height:1.6}.qpb{padding:13px 16px}.qcli{background:#f6f1e7;border-radius:7px;padding:9px 11px;margin-bottom:10px}.lb{font-size:.57rem;color:#999;text-transform:uppercase;letter-spacing:.1em}.vl{font-weight:600;color:#111;font-size:.82rem}.sv{font-size:.7rem;color:#666}.qhd{display:grid;grid-template-columns:1fr 40px 80px;gap:3px;font-size:.57rem;color:#aaa;text-transform:uppercase;border-bottom:1px solid #e5dfd0;padding-bottom:4px;margin-bottom:4px}.qi{display:grid;grid-template-columns:1fr 40px 80px;gap:3px;font-size:.71rem;padding:5px 0;border-bottom:1px solid #f0ece2;align-items:center}.in{color:#111;font-weight:500}.iq{color:#888;text-align:center}.ip{text-align:right;font-weight:600;color:#0c1929}.qtot{margin-top:8px;border-top:2px solid #0c1929;padding-top:8px}.qtr{display:flex;justify-content:space-between;font-size:.72rem;color:#777;margin-bottom:2px}.qtr.grand{font-size:.9rem;font-weight:700;color:#111;margin-top:4px}.ga{color:#c9a44a}.qnotes{margin-top:8px;background:#fdf9f0;border-left:3px solid #c9a44a;padding:6px 10px;font-size:.67rem;color:#666;border-radius:0 5px 5px 0}.qpf{background:#0c1929;padding:11px 16px;display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap}.sig-block{text-align:center}.sig-mono{font-family:'Cormorant Garamond',serif;color:#c9a44a;font-size:.92rem;letter-spacing:.1em;opacity:.73;height:25px;display:flex;align-items:center;justify-content:center}.sig-line{width:96px;height:1px;background:rgba(255,255,255,.22);margin:4px auto}.sig-nm{color:#c9a44a;font-size:.61rem;font-weight:600}.sig-tt{color:rgba(255,255,255,.32);font-size:.56rem}.sig-rut{color:rgba(255,255,255,.23);font-size:.53rem}.qpf-ct{text-align:right}.qpf-ct p{font-size:.59rem;color:rgba(255,255,255,.34);line-height:1.7}.qpf-ct a{color:#c9a44a;text-decoration:none}.qe{display:none}@media print{body{padding:0}@page{margin:8mm}}</style><script>window.onload=()=>setTimeout(()=>window.print(),500)<\/script></head><body>${pr}</body></html>`);
   w.document.close();
 }
@@ -877,7 +1116,7 @@ function abrirWA(){
   if(emp) msg+=' de '+emp;
   if(svc) msg+='. Me interesa: '+svc;
   msg+='. Quisiera una cotizacion';
-  window.open('https://wa.me/56993663399?text='+encodeURIComponent(msg),'_blank');
+  window.open('https://wa.me/'+WA_NUM+'?text='+encodeURIComponent(msg),'_blank');
 }
 </script>
 </body>

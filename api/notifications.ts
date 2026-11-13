@@ -48,7 +48,7 @@ async function sendWhatsApp(data: QuotationData) {
     const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID;
     const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN;
     const TWILIO_WHATSAPP_NUMBER = process.env.TWILIO_WHATSAPP_NUMBER;
-    const DESTINATION_NUMBER = '+56993663399';
+    const DESTINATION_NUMBER = '+56942016119';
 
     const auth = Buffer.from(`${TWILIO_ACCOUNT_SID}:${TWILIO_AUTH_TOKEN}`).toString('base64');
 

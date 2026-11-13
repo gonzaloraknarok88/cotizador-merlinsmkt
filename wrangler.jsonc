@@ -1,0 +1,7 @@
+// Despliegue gratuito en Cloudflare Workers (solo archivos estáticos).
+// Uso: npx wrangler login  &&  npx wrangler deploy
+{
+  "name": "cotizador-merlinsmkt",
+  "compatibility_date": "2025-01-01",
+  "assets": { "directory": "./" }
+}
